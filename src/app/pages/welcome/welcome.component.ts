@@ -1,7 +1,7 @@
+import { DateService } from './../../services/date.service';
 import { User } from './../../models/user';
 import { UserService } from './../../services/user.service';
 import { Component, OnInit } from '@angular/core';
-import * as moment from 'moment-timezone';
 import { NzThSelectionComponent } from 'ng-zorro-antd/table';
 
 @Component({
@@ -11,29 +11,28 @@ import { NzThSelectionComponent } from 'ng-zorro-antd/table';
 })
 export class WelcomeComponent implements OnInit {
   users: User[] = [];
-  offset: string = "";
   userName: string = "";
+  createdDate: Date = new Date();
   dateOfBirth: Date = new Date();
+
   constructor(
-    private userService: UserService
+    private userService: UserService,
+    private dateService: DateService
   ) { }
 
   ngOnInit() {
     this.getAllUsers();
-    let timezone = moment.tz.guess();
-    this.offset = 'UTC' + moment.tz(timezone).format('Z');
-    console.log("🚀 ~ file: welcome.component.ts:22 ~ WelcomeComponent ~ ngOnInit ~ this.timeZone", this.offset)
   }
 
   getAllUsers() {
     this.userService.getAllUsers().subscribe(data => {
-      console.log(data);
       this.users = data;
     });
   }
 
   addUser() {
-    let user: User = { name: this.userName, createdDate: new Date(), dateOfBirth: new Date(this.dateOfBirth.getFullYear(), this.dateOfBirth.getMonth(), this.dateOfBirth.getDate()) } as User;
+    console.log(this.dateOfBirth);
+    let user: User = { name: this.userName, createdDate: this.createdDate, dateOfBirth: this.dateService.setDateWithTimezoneOffset(this.dateOfBirth) } as User;
     this.userService.addUser(user).subscribe(() => {
       this.getAllUsers();
     });
