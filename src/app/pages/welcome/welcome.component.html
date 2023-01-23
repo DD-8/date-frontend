@@ -1,0 +1,25 @@
+<nz-table #basicTable [nzData]="users">
+  <thead>
+    <tr>
+      <th>Id</th>
+      <th>Name</th>
+      <th>Created Date</th>
+      <th>Date Of Birth</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let data of basicTable.data">
+      <td>{{data.id}}</td>
+      <td>{{data.name}}</td>
+      <td>{{data.createdDate | date: 'dd.MM.YYYY HH:mm'}}</td>
+      <td>{{data.dateOfBirth | date: 'dd.MM.YYYY HH:mm': 'UTC'}}</td>
+      <td><button nz-button (click)="deleteUser(data)">Delete</button></td>
+    </tr>
+  </tbody>
+</nz-table>
+<div style="display: flex;">
+  <input nz-input type="text" [(ngModel)]="userName" style="margin-right: 10px;">
+  <nz-date-picker [(ngModel)]="dateOfBirth" nzFormat="dd.MM.YYYY" style="margin-right: 10px;"></nz-date-picker>
+  <button nz-button (click)="addUser()">Ekle</button>
+</div>
